@@ -1,0 +1,11 @@
+company_name,contact_person,email,phone,country,city,address,payment_terms,credit_limit,status
+Fashion Forward Inc,Sarah Johnson,sarah@fashionforward.com,+1-555-0101,USA,New York,123 Fashion Ave,Net 30,500000,active
+StyleHub Global,Marco Bianchi,marco@stylehub.com,+39-02-5550102,Italy,Milan,Via della Moda 45,Net 45,750000,active
+TrendWear Ltd,Emma Williams,emma@trendwear.co.uk,+44-20-5550103,UK,London,10 Oxford Street,Net 30,400000,active
+Pacific Apparel Co,Yuki Tanaka,yuki@pacificapparel.jp,+81-3-5550104,Japan,Tokyo,2-1 Shibuya,Net 60,600000,active
+Nordic Fashion AS,Lars Andersen,lars@nordicfashion.no,+47-5550105,Norway,Oslo,Karl Johans gate 15,Net 30,350000,active
+Coastal Brands LLC,David Chen,david@coastalbrands.com,+1-555-0106,USA,Los Angeles,456 Sunset Blvd,Net 45,550000,active
+EuroStyle GmbH,Anna Mueller,anna@eurostyle.de,+49-30-5550107,Germany,Berlin,Friedrichstraße 100,Net 30,450000,active
+Silk Road Fashion,Priya Sharma,priya@silkroadfashion.in,+91-11-5550108,India,New Delhi,MG Road 200,Net 60,300000,active
+Southern Hemisphere Co,James Wright,james@southernhemi.com.au,+61-2-5550109,Australia,Sydney,George Street 50,Net 30,400000,active
+Urban Threads Inc,Michelle Park,michelle@urbanthreads.com,+1-555-0110,USA,Chicago,789 Michigan Ave,Net 45,500000,active

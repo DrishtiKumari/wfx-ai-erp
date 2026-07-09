@@ -1,0 +1,11 @@
+company_name,contact_person,email,phone,country,city,specialization,lead_time_days,rating,status
+Textile Corp,Robert Kim,robert@textilecorp.com,+82-2-5550201,South Korea,Seoul,Premium Woven Fabrics,21,4.8,active
+Fabric World Ltd,Chen Wei,chen@fabricworld.cn,+86-21-5550202,China,Shanghai,Synthetic Blends,14,4.5,active
+Golden Thread Mills,Raj Patel,raj@goldenthread.in,+91-22-5550203,India,Mumbai,Cotton & Linen,28,4.6,active
+SilkWay Textiles,Nguyen Thanh,nguyen@silkway.vn,+84-28-5550204,Vietnam,Ho Chi Minh City,Silk & Satin,30,4.3,active
+Mediterranean Fabrics,Giuseppe Romano,giuseppe@medfabrics.it,+39-02-5550205,Italy,Como,Luxury Wools,25,4.9,active
+Pacific Denim Co,Takeshi Yamamoto,takeshi@pacificdenim.jp,+81-6-5550206,Japan,Osaka,Denim & Chambray,18,4.7,active
+EcoFiber Solutions,Maria Santos,maria@ecofiber.pt,+351-21-5550207,Portugal,Porto,Sustainable Fabrics,22,4.4,active
+Ankara Textiles,Mehmet Yilmaz,mehmet@ankaratextiles.tr,+90-312-5550208,Turkey,Ankara,Knits & Jersey,16,4.2,active
+BanglaStitch Ltd,Amir Hassan,amir@banglastitch.bd,+880-2-5550209,Bangladesh,Dhaka,Cut & Sew Manufacturing,35,4.1,active
+Andean Wool Cooperative,Carlos Mendoza,carlos@andeanwool.pe,+51-1-5550210,Peru,Lima,Alpaca & Merino Wool,40,4.6,active
