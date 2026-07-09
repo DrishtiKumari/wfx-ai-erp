@@ -11,6 +11,7 @@ import logging
 
 from app.config import get_settings
 from app.routes.health import router as health_router
+from app.routes.dashboard import router as dashboard_router
 
 # ── Logging ──────────────────────────────────────────────────────────────────
 logging.basicConfig(
@@ -61,8 +62,8 @@ def create_app() -> FastAPI:
 
     # ── Routes ────────────────────────────────────────────────────
     app.include_router(health_router)
+    app.include_router(dashboard_router)
     # Future routers will be added here in subsequent phases:
-    # app.include_router(dashboard_router, prefix="/dashboard")
     # app.include_router(products_router, prefix="/products")
     # app.include_router(ai_router, prefix="/ai")
 
