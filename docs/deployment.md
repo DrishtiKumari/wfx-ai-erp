@@ -163,10 +163,12 @@ origins = [
 | Issue | Solution |
 |-------|----------|
 | Backend 503 | Free tier sleeping — wait ~30s for cold start |
-| CORS error | Check allowed origins in main.py |
-| DB connection fail | Verify DATABASE_URL format and Supabase status |
-| AI query timeout | Check OpenRouter API key and model availability |
-| Frontend build fail | Check NEXT_PUBLIC_API_URL is set correctly |
+| CORS error | Check `ALLOWED_ORIGINS` env var includes frontend URL |
+| DB connection fail | Verify `DATABASE_URL` format and Supabase project status |
+| AI query timeout | Check `OPENROUTER_API_KEY` and model availability |
+| Frontend build fail | Check `NEXT_PUBLIC_API_URL` is set correctly |
+| No data on dashboard | Run `python scripts/import_csv.py --data-dir ../data` |
+| Import script fails | Ensure schema is created first: `--run-schema` flag |
 
 ---
 

@@ -4,13 +4,20 @@
 
 ---
 
-## Opening (30 seconds)
+## Prerequisites
+
+Before the demo, ensure:
+- [ ] Backend is running (`uvicorn app.main:app --reload --port 8000`)
+- [ ] Frontend is running (`npm run dev` on port 3000)
+- [ ] Database has sample data imported
+- [ ] Test one AI query to warm up the LLM connection
+- [ ] Have backup screenshots in case of network issues
 
 "This is WFX AI ERP, an AI-native exploration platform built for the apparel industry. It allows business users to explore ERP data, ask questions in plain English, and get instant insights — all without writing SQL."
 
 ---
 
-## Section 1: Dashboard (1 minute)
+## Opening (30 seconds)
 
 ### Show
 
