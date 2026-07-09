@@ -47,7 +47,7 @@ export default function ProductsPage() {
   }, [page, sortBy, sortOrder, category, supplier]);
 
   useEffect(() => {
-    fetchProducts();
+    void fetchProducts();
   }, [fetchProducts]);
 
   useEffect(() => {

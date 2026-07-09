@@ -54,7 +54,7 @@ export function ProductTable({
                     {col.label}
                   </span>
                   {sortBy === col.key && (
-                    <ArrowUpDown className="h-3 w-3 text-gray-900" />
+                    <ArrowUpDown className={`h-3 w-3 text-gray-900 ${sortOrder === "desc" ? "rotate-180" : ""}`} />
                   )}
                 </div>
               </TableHead>

@@ -77,7 +77,7 @@ export default function SearchPage() {
   }, [keyword, page, activeFilters]);
 
   useEffect(() => {
-    doSearch();
+    void doSearch();
   }, [doSearch]);
 
   const handleSearch = (e: React.FormEvent) => {
