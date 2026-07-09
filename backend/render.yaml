@@ -4,9 +4,10 @@ services:
     runtime: python
     region: oregon
     plan: free
-    rootDir: backend
+    branch: master
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
     envVars:
       - key: DATABASE_URL
         sync: false
@@ -20,3 +21,5 @@ services:
         value: meta-llama/llama-3.1-8b-instruct:free
       - key: ALLOWED_ORIGINS
         sync: false
+      - key: PYTHON_VERSION
+        value: "3.11.9"
