@@ -48,7 +48,7 @@ async def get_revenue_by_buyer(db: AsyncSession, limit: int = 10) -> list[dict]:
     Returns buyer name, total revenue, and order count.
     """
     try:
-        result = await db.execute(text(f"""
+        result = await db.execute(text("""
             SELECT
                 buyer,
                 ROUND(SUM(total_amount)::numeric, 2)::float AS revenue,
@@ -57,8 +57,8 @@ async def get_revenue_by_buyer(db: AsyncSession, limit: int = 10) -> list[dict]:
             WHERE buyer IS NOT NULL
             GROUP BY buyer
             ORDER BY revenue DESC
-            LIMIT {limit}
-        """))
+            LIMIT :limit
+        """), {"limit": limit})
         return [dict(row) for row in result.mappings().all()]
     except Exception as e:
         logger.error(f"get_revenue_by_buyer error: {e}")
@@ -108,7 +108,7 @@ async def get_top_suppliers(db: AsyncSession, limit: int = 10) -> list[dict]:
     Top suppliers by product count — used for horizontal bar chart.
     """
     try:
-        result = await db.execute(text(f"""
+        result = await db.execute(text("""
             SELECT
                 COALESCE(supplier, 'Unknown') AS supplier,
                 COUNT(*)::int                 AS product_count
@@ -116,8 +116,8 @@ async def get_top_suppliers(db: AsyncSession, limit: int = 10) -> list[dict]:
             WHERE supplier IS NOT NULL
             GROUP BY supplier
             ORDER BY product_count DESC
-            LIMIT {limit}
-        """))
+            LIMIT :limit
+        """), {"limit": limit})
         return [dict(row) for row in result.mappings().all()]
     except Exception as e:
         logger.error(f"get_top_suppliers error: {e}")

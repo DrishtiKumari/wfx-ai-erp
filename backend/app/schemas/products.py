@@ -11,29 +11,30 @@ class ProductItem(BaseModel):
     """A single product in listing responses."""
     id: Optional[int] = None
     style_number: str
-    description: Optional[str] = None
+    style_name: Optional[str] = None
     category: Optional[str] = None
     supplier: Optional[str] = None
     fabric: Optional[str] = None
+    gsm: Optional[int] = None
     color: Optional[str] = None
+    print: Optional[str] = None
     size_range: Optional[str] = None
     season: Optional[str] = None
+    brand: Optional[str] = None
+    cost: Optional[float] = None
     selling_price: Optional[float] = None
     status: Optional[str] = None
     image_url: Optional[str] = None
-    style_name: Optional[str] = None
-    gsm: Optional[str] = None
-    print: Optional[str] = None
-    brand: Optional[str] = None
-    cost: Optional[float] = None
+    trend_score: Optional[int] = None
+    ai_demand: Optional[str] = None
 
 
 class ProductListResponse(BaseModel):
     """Paginated product list response."""
-    products: List[ProductItem]
+    items: List[ProductItem]
     total: int
     page: int
-    limit: int
+    page_size: int
     total_pages: int
 
 

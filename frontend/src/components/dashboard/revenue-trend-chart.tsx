@@ -1,8 +1,8 @@
 "use client";
 
 import {
-  BarChart,
-  Bar,
+  AreaChart,
+  Area,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -10,35 +10,33 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import type { BuyerMixItem } from "@/lib/types";
+import type { RevenueChartItem } from "@/lib/types";
 
-interface RevenueChartProps {
-  data: BuyerMixItem[];
+interface RevenueTrendChartProps {
+  data: RevenueChartItem[];
 }
 
-export function RevenueChart({ data }: RevenueChartProps) {
+export function RevenueTrendChart({ data }: RevenueTrendChartProps) {
   const chartData = data.map((item) => ({
-    name: item.name.length > 15 ? item.name.slice(0, 15) + "…" : item.name,
-    revenue: item.value,
-    fullName: item.name,
-    color: item.color,
+    month: item.month,
+    revenue: item.revenue,
   }));
 
   return (
     <Card className="border-gray-200 shadow-sm">
       <CardHeader>
         <CardTitle className="text-base font-semibold text-gray-900">
-          Revenue by Buyer
+          Monthly Revenue Trend
         </CardTitle>
       </CardHeader>
       <CardContent>
         <div className="h-72">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={chartData} margin={{ top: 5, right: 20, left: 10, bottom: 5 }}>
+            <AreaChart data={chartData} margin={{ top: 5, right: 20, left: 10, bottom: 5 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
               <XAxis
-                dataKey="name"
-                tick={{ fontSize: 12, fill: "#6b7280" }}
+                dataKey="month"
+                tick={{ fontSize: 11, fill: "#6b7280" }}
                 axisLine={{ stroke: "#e5e7eb" }}
               />
               <YAxis
@@ -48,15 +46,20 @@ export function RevenueChart({ data }: RevenueChartProps) {
               />
               <Tooltip
                 formatter={(value) => [`$${Number(value).toLocaleString()}`, "Revenue"]}
-                labelFormatter={(_, payload) => payload?.[0]?.payload?.fullName || ""}
                 contentStyle={{
                   borderRadius: "8px",
                   border: "1px solid #e5e7eb",
                   boxShadow: "0 4px 6px -1px rgba(0,0,0,0.1)",
                 }}
               />
-              <Bar dataKey="revenue" fill="#1f2937" radius={[4, 4, 0, 0]} />
-            </BarChart>
+              <Area
+                type="monotone"
+                dataKey="revenue"
+                stroke="#1f2937"
+                fill="#f3f4f6"
+                strokeWidth={2}
+              />
+            </AreaChart>
           </ResponsiveContainer>
         </div>
       </CardContent>

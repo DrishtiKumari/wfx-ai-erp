@@ -26,7 +26,6 @@ const columns = [
   { key: "category", label: "Category" },
   { key: "supplier", label: "Supplier" },
   { key: "fabric", label: "Fabric" },
-  { key: "gsm", label: "GSM" },
   { key: "color", label: "Color" },
   { key: "selling_price", label: "Price" },
 ];
@@ -79,7 +78,7 @@ export function ProductTable({
                   {product.style_number}
                 </TableCell>
                 <TableCell className="max-w-48 truncate text-gray-700">
-                  {product.style_name || "—"}
+                  {product.style_name || product.description || "—"}
                 </TableCell>
                 <TableCell>
                   <Badge variant="secondary" className="bg-gray-100 text-gray-700 font-normal">
@@ -91,9 +90,6 @@ export function ProductTable({
                 </TableCell>
                 <TableCell className="text-gray-600 text-sm">
                   {product.fabric || "—"}
-                </TableCell>
-                <TableCell className="text-gray-600 text-sm">
-                  {product.gsm || "—"}
                 </TableCell>
                 <TableCell className="text-gray-600 text-sm">
                   {product.color || "—"}

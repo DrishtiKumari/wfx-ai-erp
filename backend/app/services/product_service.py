@@ -92,22 +92,24 @@ async def list_products(
     # Fetch paginated results
     query_sql = f"""
         SELECT id, style_number, style_name, category, supplier,
-               fabric, color, size_range, season, selling_price, status, image_url,
-               gsm, print, brand, cost
+               fabric, gsm, color, print, size_range, season, brand,
+               cost, selling_price, status, image_url, trend_score, ai_demand
         FROM finished_goods
         {where_clause}
         ORDER BY {sort_by} {sort_order}
-        LIMIT {limit} OFFSET {offset}
+        LIMIT :limit OFFSET :offset
     """
+    params["limit"] = limit
+    params["offset"] = offset
 
     result = await db.execute(text(query_sql), params)
     products = [dict(row) for row in result.mappings().all()]
 
     return {
-        "products": products,
+        "items": products,
         "total": total,
         "page": page,
-        "limit": limit,
+        "page_size": limit,
         "total_pages": total_pages,
     }
 
@@ -120,8 +122,8 @@ async def get_product_by_style(db: AsyncSession, style_number: str) -> Optional[
     result = await db.execute(
         text("""
             SELECT id, style_number, style_name, category, supplier,
-                   fabric, color, size_range, season, selling_price, status, image_url,
-                   gsm, print, brand, cost
+                   fabric, gsm, color, print, size_range, season, brand,
+                   cost, selling_price, status, image_url, trend_score, ai_demand
             FROM finished_goods
             WHERE style_number = :style_number
         """),
@@ -145,7 +147,7 @@ async def search_products(
     max_price: Optional[float] = None,
 ) -> dict:
     """
-    Search products by keyword across description, category, fabric, color, supplier.
+    Search products by keyword across style_name, category, fabric, color, supplier.
     Also supports additional filter criteria.
     """
     conditions = []
@@ -159,7 +161,8 @@ async def search_products(
             fabric ILIKE :q OR
             color ILIKE :q OR
             supplier ILIKE :q OR
-            style_number ILIKE :q
+            style_number ILIKE :q OR
+            brand ILIKE :q
         )""")
         params["q"] = f"%{q}%"
 
@@ -201,22 +204,24 @@ async def search_products(
 
     query_sql = f"""
         SELECT id, style_number, style_name, category, supplier,
-               fabric, color, size_range, season, selling_price, status, image_url,
-               gsm, print, brand, cost
+               fabric, gsm, color, print, size_range, season, brand,
+               cost, selling_price, status, image_url, trend_score, ai_demand
         FROM finished_goods
         {where_clause}
         ORDER BY selling_price ASC
-        LIMIT {limit} OFFSET {offset}
+        LIMIT :limit OFFSET :offset
     """
+    params["limit"] = limit
+    params["offset"] = offset
 
     result = await db.execute(text(query_sql), params)
     products = [dict(row) for row in result.mappings().all()]
 
     return {
-        "products": products,
+        "items": products,
         "total": total,
         "page": page,
-        "limit": limit,
+        "page_size": limit,
         "total_pages": total_pages,
     }
 

@@ -47,14 +47,13 @@ def _get_engine():
         _engine = create_async_engine(
             async_url,
             echo=settings.debug,
-            pool_size=1,
-            max_overflow=2,
+            pool_size=2,
+            max_overflow=3,
             pool_pre_ping=True,
-            pool_recycle=60,
+            pool_recycle=300,
             pool_use_lifo=True,
             connect_args={
                 "statement_cache_size": 0,
-                "prepared_statement_cache_size": 0,
             },
         )
     return _engine

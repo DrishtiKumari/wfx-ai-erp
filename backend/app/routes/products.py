@@ -96,7 +96,7 @@ async def list_products(
     page: int = Query(default=1, ge=1, description="Page number"),
     limit: int = Query(default=20, ge=1, le=100, description="Items per page"),
     sort_by: str = Query(default="style_number", description="Column to sort by"),
-    sort_order: str = Query(default="asc", regex="^(asc|desc)$", description="Sort direction"),
+    sort_order: str = Query(default="asc", pattern="^(asc|desc)$", description="Sort direction"),
     category: Optional[str] = Query(default=None, description="Filter by category"),
     fabric: Optional[str] = Query(default=None, description="Filter by fabric"),
     supplier: Optional[str] = Query(default=None, description="Filter by supplier"),

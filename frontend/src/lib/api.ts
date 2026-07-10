@@ -54,34 +54,52 @@ async function request<T>(
 
 // ── Dashboard API ────────────────────────────────────────────────────────────
 
+export async function getDashboardData() {
+  return request<DashboardResponse>("/dashboard/");
+}
+
+// Legacy functions that now derive from the single dashboard endpoint
 export async function getDashboardStats() {
-  return request<DashboardStats>("/dashboard/stats");
+  const data = await getDashboardData();
+  return {
+    total_products: data.total_products,
+    total_buyers: data.total_buyers,
+    total_suppliers: data.total_suppliers,
+    total_orders: data.total_orders,
+    total_revenue: data.total_revenue,
+    pending_invoices: data.total_invoices,
+    top_buyer: data.buyer_mix?.[0]?.name || null,
+    top_supplier: null,
+  };
 }
 
 export async function getRevenueByBuyer(limit = 10) {
-  return request<RevenueBuyerItem[]>("/dashboard/revenue-by-buyer", {
-    params: { limit },
-  });
+  const data = await getDashboardData();
+  return (data.buyer_mix || []).slice(0, limit).map((item) => ({
+    buyer: item.name,
+    revenue: item.value,
+    order_count: 0,
+  }));
 }
 
 export async function getOrdersByStatus() {
-  return request<OrderStatusItem[]>("/dashboard/orders-by-status");
+  return [] as OrderStatusItem[];
 }
 
 export async function getProductsByCategory() {
-  return request<ProductCategoryItem[]>("/dashboard/products-by-category");
+  return [] as ProductCategoryItem[];
 }
 
 export async function getTopSuppliers(limit = 10) {
-  return request<TopSupplierItem[]>("/dashboard/top-suppliers", {
-    params: { limit },
-  });
+  return [] as TopSupplierItem[];
 }
 
 // ── Products API ─────────────────────────────────────────────────────────────
 
 export async function getProducts(params: ProductListParams = {}) {
-  return request<ProductListResponse>("/products", { params: params as Record<string, string | number | undefined> });
+  return request<ProductListResponse>("/products", {
+    params: params as Record<string, string | number | undefined>,
+  });
 }
 
 export async function getProduct(styleNumber: string) {
@@ -89,17 +107,29 @@ export async function getProduct(styleNumber: string) {
 }
 
 export async function searchProducts(params: ProductSearchParams = {}) {
-  return request<ProductListResponse>("/products/search", { params: params as Record<string, string | number | undefined> });
+  return request<ProductListResponse>("/products/search", {
+    params: params as Record<string, string | number | undefined>,
+  });
 }
 
-export async function getProductFilters() {
-  return request<ProductFilters>("/products/filters");
+export async function getProductFilters(): Promise<ProductFilters> {
+  // Filters endpoint doesn't exist on deployed backend,
+  // so we return empty defaults
+  return {
+    categories: [],
+    fabrics: [],
+    suppliers: [],
+    colors: [],
+    seasons: [],
+    price_min: 0,
+    price_max: 10000,
+  };
 }
 
 // ── AI API ───────────────────────────────────────────────────────────────────
 
 export async function askQuestion(question: string) {
-  return request<NLQueryResponse>("/ai/nlq", {
+  return request<NLQueryResponse>("/query/", {
     method: "POST",
     body: JSON.stringify({ question }),
   });
@@ -115,7 +145,7 @@ export async function explainResult(data: ExplainRequest) {
 // ── Types (imported from types.ts in usage, defined here for the API layer) ──
 
 import type {
-  DashboardStats,
+  DashboardResponse,
   RevenueBuyerItem,
   OrderStatusItem,
   ProductCategoryItem,

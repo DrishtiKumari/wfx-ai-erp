@@ -39,6 +39,8 @@ export function ProductDetail({ product, open, onClose }: ProductDetailProps) {
       label: "Selling Price",
       value: product.selling_price ? `$${product.selling_price.toFixed(2)}` : undefined,
     },
+    { label: "Trend Score", value: product.trend_score?.toString() },
+    { label: "AI Demand", value: product.ai_demand },
     { label: "Status", value: product.status },
   ];
 
@@ -49,8 +51,20 @@ export function ProductDetail({ product, open, onClose }: ProductDetailProps) {
           <SheetTitle className="text-xl font-bold text-gray-900">
             {product.style_number}
           </SheetTitle>
-          <p className="text-sm text-gray-500">{product.description}</p>
+          <p className="text-sm text-gray-500">
+            {product.style_name || product.description}
+          </p>
         </SheetHeader>
+
+        {product.image_url && (
+          <div className="mt-4">
+            <img
+              src={product.image_url}
+              alt={product.style_name || product.style_number}
+              className="w-full h-48 object-cover rounded-lg"
+            />
+          </div>
+        )}
 
         <Separator className="my-6" />
 
@@ -81,6 +95,19 @@ export function ProductDetail({ product, open, onClose }: ProductDetailProps) {
           {product.season && (
             <Badge variant="secondary" className="bg-gray-100 text-gray-700">
               {product.season}
+            </Badge>
+          )}
+          {product.ai_demand && (
+            <Badge
+              className={
+                product.ai_demand === "High"
+                  ? "bg-green-100 text-green-800"
+                  : product.ai_demand === "Medium"
+                  ? "bg-yellow-100 text-yellow-800"
+                  : "bg-gray-100 text-gray-600"
+              }
+            >
+              {product.ai_demand} Demand
             </Badge>
           )}
           {product.status && (

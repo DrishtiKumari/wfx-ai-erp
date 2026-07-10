@@ -54,7 +54,7 @@ export default function SearchPage() {
       const result = await searchProducts({
         q: keyword || undefined,
         page,
-        limit: 12,
+        page_size: 12,
         category: activeFilters.category || undefined,
         fabric: activeFilters.fabric || undefined,
         supplier: activeFilters.supplier || undefined,
@@ -319,23 +319,25 @@ export default function SearchPage() {
             <Skeleton key={i} className="h-48 rounded-xl" />
           ))}
         </div>
-      ) : data && data.products.length > 0 ? (
+      ) : data && data.items.length > 0 ? (
         <>
           <p className="text-sm text-gray-500">
-            Showing {data.products.length} of {data.total} results
+            Showing {data.items.length} of {data.total} results
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {data.products.map((product) => (
+            {data.items.map((product) => (
               <ProductCard key={product.style_number} product={product} />
             ))}
           </div>
-          <Pagination
-            page={data.page}
-            totalPages={data.total_pages}
-            onPageChange={setPage}
-          />
+          {data.total_pages > 1 && (
+            <Pagination
+              page={data.page || page}
+              totalPages={data.total_pages || Math.ceil(data.total / 12)}
+              onPageChange={setPage}
+            />
+          )}
         </>
-      ) : data && data.products.length === 0 ? (
+      ) : data && data.items.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-16 text-center">
           <Search className="h-12 w-12 text-gray-300" />
           <h3 className="mt-4 text-lg font-semibold text-gray-700">
@@ -368,7 +370,7 @@ function ProductCard({ product }: { product: ProductItem }) {
               {product.style_number}
             </p>
             <p className="mt-0.5 text-sm text-gray-600 line-clamp-2">
-              {product.description || "No description"}
+              {product.style_name || product.description || "No description"}
             </p>
           </div>
           {product.selling_price && (

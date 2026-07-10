@@ -1,18 +1,18 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { Search, AlertCircle } from "lucide-react";
+import { Search, AlertCircle, SlidersHorizontal } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ProductTable } from "@/components/products/product-table";
 import { ProductDetail } from "@/components/products/product-detail";
 import { Pagination } from "@/components/products/pagination";
-import { getProducts, getProductFilters } from "@/lib/api";
-import type { ProductItem, ProductListResponse, ProductFilters } from "@/lib/types";
+import { getProducts } from "@/lib/api";
+import type { ProductItem, ProductListResponse } from "@/lib/types";
 
 export default function ProductsPage() {
   const [data, setData] = useState<ProductListResponse | null>(null);
-  const [filters, setFilters] = useState<ProductFilters | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<ProductItem | null>(null);
@@ -32,7 +32,7 @@ export default function ProductsPage() {
       setError(null);
       const result = await getProducts({
         page,
-        limit: 15,
+        page_size: 12,
         sort_by: sortBy,
         sort_order: sortOrder,
         category: category || undefined,
@@ -50,42 +50,28 @@ export default function ProductsPage() {
     void fetchProducts();
   }, [fetchProducts]);
 
-  useEffect(() => {
-    getProductFilters()
-      .then(setFilters)
-      .catch(() => {});
-  }, []);
-
-  const handleSort = (column: string) => {
-    if (sortBy === column) {
-      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
-    } else {
-      setSortBy(column);
-      setSortOrder("asc");
-    }
-    setPage(1);
-  };
-
   const handleSelectProduct = (product: ProductItem) => {
     setSelectedProduct(product);
     setDetailOpen(true);
   };
 
-  const handleFilterChange = (type: string, value: string) => {
-    if (type === "category") setCategory(value);
-    if (type === "supplier") setSupplier(value);
+  const handleSort = (value: string) => {
+    const [field, order] = value.split(":");
+    setSortBy(field);
+    setSortOrder(order);
     setPage(1);
   };
 
-  // Filter products by search term locally (description/style_number)
-  const displayProducts = data?.products.filter((p) => {
+  // Filter products by search term locally
+  const displayProducts = data?.items.filter((p) => {
     if (!searchTerm) return true;
     const term = searchTerm.toLowerCase();
     return (
       p.style_number?.toLowerCase().includes(term) ||
-      p.description?.toLowerCase().includes(term) ||
+      p.style_name?.toLowerCase().includes(term) ||
       p.fabric?.toLowerCase().includes(term) ||
-      p.color?.toLowerCase().includes(term)
+      p.color?.toLowerCase().includes(term) ||
+      p.supplier?.toLowerCase().includes(term)
     );
   }) || [];
 
@@ -129,32 +115,17 @@ export default function ProductsPage() {
           />
         </div>
 
-        {/* Category filter */}
+        {/* Sort */}
         <select
-          value={category}
-          onChange={(e) => handleFilterChange("category", e.target.value)}
+          value={`${sortBy}:${sortOrder}`}
+          onChange={(e) => handleSort(e.target.value)}
           className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200"
         >
-          <option value="">All Categories</option>
-          {filters?.categories.map((cat) => (
-            <option key={cat} value={cat}>
-              {cat}
-            </option>
-          ))}
-        </select>
-
-        {/* Supplier filter */}
-        <select
-          value={supplier}
-          onChange={(e) => handleFilterChange("supplier", e.target.value)}
-          className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200"
-        >
-          <option value="">All Suppliers</option>
-          {filters?.suppliers.map((sup) => (
-            <option key={sup} value={sup}>
-              {sup}
-            </option>
-          ))}
+          <option value="style_number:asc">Style # (A-Z)</option>
+          <option value="style_number:desc">Style # (Z-A)</option>
+          <option value="selling_price:asc">Price (Low-High)</option>
+          <option value="selling_price:desc">Price (High-Low)</option>
+          <option value="category:asc">Category (A-Z)</option>
         </select>
 
         {/* Results count */}
@@ -165,26 +136,104 @@ export default function ProductsPage() {
         )}
       </div>
 
-      {/* Table */}
+      {/* Product Gallery */}
       {loading ? (
-        <div className="space-y-3">
-          <Skeleton className="h-12 rounded-lg" />
-          {Array.from({ length: 8 }).map((_, i) => (
-            <Skeleton key={i} className="h-14 rounded-lg" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+          {Array.from({ length: 12 }).map((_, i) => (
+            <Skeleton key={i} className="h-80 rounded-xl" />
           ))}
         </div>
       ) : (
-        <ProductTable
-          products={displayProducts}
-          sortBy={sortBy}
-          sortOrder={sortOrder}
-          onSort={handleSort}
-          onSelect={handleSelectProduct}
-        />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+          {displayProducts.length === 0 ? (
+            <div className="col-span-full flex flex-col items-center justify-center py-16">
+              <Search className="h-12 w-12 text-gray-300" />
+              <h3 className="mt-4 text-lg font-semibold text-gray-700">
+                No products found
+              </h3>
+              <p className="mt-2 text-sm text-gray-500">
+                Try adjusting your search or filters.
+              </p>
+            </div>
+          ) : (
+            displayProducts.map((product) => (
+              <Card
+                key={product.style_number}
+                className="border-gray-200 shadow-sm hover:shadow-lg transition-all cursor-pointer group overflow-hidden"
+                onClick={() => handleSelectProduct(product)}
+              >
+                {/* Product Image */}
+                <div className="aspect-[4/3] bg-gray-100 overflow-hidden">
+                  {product.image_url ? (
+                    <img
+                      src={product.image_url}
+                      alt={product.style_name || product.style_number}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-gray-400">
+                      <span className="text-xs">No Image</span>
+                    </div>
+                  )}
+                </div>
+
+                <CardContent className="p-4 space-y-2">
+                  {/* Style Number & Name */}
+                  <div>
+                    <p className="text-xs font-medium text-gray-500">
+                      {product.style_number}
+                    </p>
+                    <p className="text-sm font-semibold text-gray-900 truncate">
+                      {product.style_name || "—"}
+                    </p>
+                  </div>
+
+                  {/* Fabric & GSM */}
+                  <div className="flex items-center gap-2 text-xs text-gray-600">
+                    <span>{product.fabric || "—"}</span>
+                    {product.gsm && (
+                      <>
+                        <span className="text-gray-300">•</span>
+                        <span>{product.gsm} GSM</span>
+                      </>
+                    )}
+                  </div>
+
+                  {/* Supplier */}
+                  <p className="text-xs text-gray-500 truncate">
+                    {product.supplier || "Unknown supplier"}
+                  </p>
+
+                  {/* Price & Demand */}
+                  <div className="flex items-center justify-between pt-1">
+                    <span className="text-sm font-bold text-gray-900">
+                      {product.selling_price
+                        ? `$${product.selling_price.toFixed(2)}`
+                        : "—"}
+                    </span>
+                    {product.ai_demand && (
+                      <Badge
+                        variant="secondary"
+                        className={
+                          product.ai_demand === "High"
+                            ? "bg-green-100 text-green-700 text-xs"
+                            : "bg-gray-100 text-gray-600 text-xs"
+                        }
+                      >
+                        {product.ai_demand}
+                      </Badge>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            ))
+          )}
+        </div>
       )}
 
       {/* Pagination */}
-      {data && (
+      {data && data.total_pages > 1 && (
         <Pagination
           page={data.page}
           totalPages={data.total_pages}

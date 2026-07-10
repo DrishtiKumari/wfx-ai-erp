@@ -8,36 +8,19 @@ import {
   ShoppingCart,
   DollarSign,
   AlertCircle,
-  Crown,
-  Star,
+  FileText,
 } from "lucide-react";
 import { StatCard } from "@/components/dashboard/stat-card";
 import { RevenueChart } from "@/components/dashboard/revenue-chart";
-import { OrdersStatusChart } from "@/components/dashboard/orders-status-chart";
-import { CategoryChart } from "@/components/dashboard/category-chart";
-import { SuppliersChart } from "@/components/dashboard/suppliers-chart";
+import { RevenueTrendChart } from "@/components/dashboard/revenue-trend-chart";
+import { RecentOrders } from "@/components/dashboard/recent-orders";
+import { InsightsPanel } from "@/components/dashboard/insights-panel";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  getDashboardStats,
-  getRevenueByBuyer,
-  getOrdersByStatus,
-  getProductsByCategory,
-  getTopSuppliers,
-} from "@/lib/api";
-import type {
-  DashboardStats,
-  RevenueBuyerItem,
-  OrderStatusItem,
-  ProductCategoryItem,
-  TopSupplierItem,
-} from "@/lib/types";
+import { getDashboardData } from "@/lib/api";
+import type { DashboardResponse } from "@/lib/types";
 
 export default function DashboardPage() {
-  const [stats, setStats] = useState<DashboardStats | null>(null);
-  const [revenueData, setRevenueData] = useState<RevenueBuyerItem[]>([]);
-  const [ordersData, setOrdersData] = useState<OrderStatusItem[]>([]);
-  const [categoryData, setCategoryData] = useState<ProductCategoryItem[]>([]);
-  const [suppliersData, setSuppliersData] = useState<TopSupplierItem[]>([]);
+  const [data, setData] = useState<DashboardResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -46,22 +29,8 @@ export default function DashboardPage() {
       try {
         setLoading(true);
         setError(null);
-
-        // Fetch sequentially to avoid pgbouncer prepared statement conflicts
-        const statsRes = await getDashboardStats();
-        setStats(statsRes);
-
-        const revenueRes = await getRevenueByBuyer();
-        setRevenueData(revenueRes);
-
-        const ordersRes = await getOrdersByStatus();
-        setOrdersData(ordersRes);
-
-        const categoryRes = await getProductsByCategory();
-        setCategoryData(categoryRes);
-
-        const suppliersRes = await getTopSuppliers();
-        setSuppliersData(suppliersRes);
+        const response = await getDashboardData();
+        setData(response);
       } catch (err) {
         setError(
           err instanceof Error ? err.message : "Failed to load dashboard data"
@@ -105,52 +74,42 @@ export default function DashboardPage() {
 
       {/* KPI Cards */}
       {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {Array.from({ length: 8 }).map((_, i) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {Array.from({ length: 6 }).map((_, i) => (
             <Skeleton key={i} className="h-32 rounded-xl" />
           ))}
         </div>
-      ) : stats ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      ) : data ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <StatCard
             title="Total Products"
-            value={stats.total_products}
+            value={data.total_products.toLocaleString()}
             icon={Package}
           />
           <StatCard
             title="Total Buyers"
-            value={stats.total_buyers}
+            value={data.total_buyers}
             icon={Users}
           />
           <StatCard
             title="Total Suppliers"
-            value={stats.total_suppliers}
+            value={data.total_suppliers}
             icon={Truck}
           />
           <StatCard
             title="Total Orders"
-            value={stats.total_orders}
+            value={data.total_orders.toLocaleString()}
             icon={ShoppingCart}
           />
           <StatCard
             title="Total Revenue"
-            value={`$${stats.total_revenue.toLocaleString()}`}
+            value={`$${(data.total_revenue / 1000000).toFixed(1)}M`}
             icon={DollarSign}
           />
           <StatCard
-            title="Pending Invoices"
-            value={stats.pending_invoices}
-            icon={AlertCircle}
-          />
-          <StatCard
-            title="Top Buyer"
-            value={stats.top_buyer || "—"}
-            icon={Crown}
-          />
-          <StatCard
-            title="Top Supplier"
-            value={stats.top_supplier || "—"}
-            icon={Star}
+            title="Total Invoices"
+            value={data.total_invoices.toLocaleString()}
+            icon={FileText}
           />
         </div>
       ) : null}
@@ -162,14 +121,14 @@ export default function DashboardPage() {
             <Skeleton key={i} className="h-96 rounded-xl" />
           ))}
         </div>
-      ) : (
+      ) : data ? (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <RevenueChart data={revenueData} />
-          <OrdersStatusChart data={ordersData} />
-          <CategoryChart data={categoryData} />
-          <SuppliersChart data={suppliersData} />
+          <RevenueTrendChart data={data.revenue_chart} />
+          <RevenueChart data={data.buyer_mix} />
+          <RecentOrders data={data.recent_orders} />
+          <InsightsPanel data={data.insights} />
         </div>
-      )}
+      ) : null}
     </div>
   );
 }

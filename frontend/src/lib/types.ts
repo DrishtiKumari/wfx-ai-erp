@@ -1,5 +1,5 @@
 /**
- * Shared TypeScript types — mirrors backend Pydantic schemas.
+ * Shared TypeScript types — mirrors deployed backend API responses.
  */
 
 // ── Dashboard ────────────────────────────────────────────────────────────────
@@ -9,12 +9,65 @@ export interface DashboardStats {
   total_buyers: number;
   total_suppliers: number;
   total_orders: number;
+  total_invoices: number;
   total_revenue: number;
-  pending_invoices: number;
-  top_buyer: string | null;
-  top_supplier: string | null;
 }
 
+export interface RevenueChartItem {
+  month: string;
+  revenue: number;
+}
+
+export interface BuyerMixItem {
+  name: string;
+  value: number;
+  color: string;
+}
+
+export interface RecentOrder {
+  order_number: string;
+  buyer: string;
+  style_number: string;
+  quantity: number;
+  unit_price: number;
+  shipment_date: string;
+  status: string;
+  buyer_name: string;
+  product: string;
+  total_value: number;
+  ship_date: string;
+  order_date: string | null;
+}
+
+export interface OperationalMetric {
+  label: string;
+  value: number;
+  unit: string;
+  color: string;
+  confidence: number;
+}
+
+export interface DashboardInsight {
+  intent: string;
+  text: string;
+  confidence: number;
+}
+
+export interface DashboardResponse {
+  total_buyers: number;
+  total_suppliers: number;
+  total_orders: number;
+  total_invoices: number;
+  total_products: number;
+  total_revenue: number;
+  revenue_chart: RevenueChartItem[];
+  buyer_mix: BuyerMixItem[];
+  recent_orders: RecentOrder[];
+  operational_metrics: OperationalMetric[];
+  insights: DashboardInsight[];
+}
+
+// Legacy aliases for backward compatibility
 export interface RevenueBuyerItem {
   buyer: string;
   revenue: number;
@@ -56,19 +109,21 @@ export interface ProductItem {
   size_range?: string;
   status?: string;
   image_url?: string;
+  trend_score?: number;
+  ai_demand?: string;
 }
 
 export interface ProductListResponse {
-  products: ProductItem[];
+  items: ProductItem[];
   total: number;
   page: number;
-  limit: number;
+  page_size: number;
   total_pages: number;
 }
 
 export interface ProductListParams {
   page?: number;
-  limit?: number;
+  page_size?: number;
   sort_by?: string;
   sort_order?: string;
   category?: string;
@@ -84,7 +139,7 @@ export interface ProductListParams {
 export interface ProductSearchParams {
   q?: string;
   page?: number;
-  limit?: number;
+  page_size?: number;
   category?: string;
   fabric?: string;
   supplier?: string;
