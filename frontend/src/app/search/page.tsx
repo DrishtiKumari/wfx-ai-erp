@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Pagination } from "@/components/products/pagination";
-import { searchProducts, getProductFilters } from "@/lib/api";
+import { searchProducts, getProducts, getProductFilters } from "@/lib/api";
 import type { ProductItem, ProductListResponse, ProductFilters } from "@/lib/types";
 
 export default function SearchPage() {
@@ -51,22 +51,40 @@ export default function SearchPage() {
       setLoading(true);
       setError(null);
 
-      const result = await searchProducts({
-        q: keyword || undefined,
-        page,
-        page_size: 12,
-        category: activeFilters.category || undefined,
-        fabric: activeFilters.fabric || undefined,
-        supplier: activeFilters.supplier || undefined,
-        color: activeFilters.color || undefined,
-        season: activeFilters.season || undefined,
-        min_price: activeFilters.min_price
-          ? Number(activeFilters.min_price)
-          : undefined,
-        max_price: activeFilters.max_price
-          ? Number(activeFilters.max_price)
-          : undefined,
-      });
+      let result;
+      if (keyword) {
+        // Use search endpoint when there's a keyword
+        result = await searchProducts({
+          q: keyword,
+          category: activeFilters.category || undefined,
+          fabric: activeFilters.fabric || undefined,
+          supplier: activeFilters.supplier || undefined,
+          color: activeFilters.color || undefined,
+          season: activeFilters.season || undefined,
+          min_price: activeFilters.min_price
+            ? Number(activeFilters.min_price)
+            : undefined,
+          max_price: activeFilters.max_price
+            ? Number(activeFilters.max_price)
+            : undefined,
+        });
+      } else {
+        // Use products listing endpoint when no keyword
+        result = await getProducts({
+          page,
+          page_size: 12,
+          category: activeFilters.category || undefined,
+          supplier: activeFilters.supplier || undefined,
+          color: activeFilters.color || undefined,
+          season: activeFilters.season || undefined,
+          min_price: activeFilters.min_price
+            ? Number(activeFilters.min_price)
+            : undefined,
+          max_price: activeFilters.max_price
+            ? Number(activeFilters.max_price)
+            : undefined,
+        });
+      }
 
       setData(result);
     } catch (err) {

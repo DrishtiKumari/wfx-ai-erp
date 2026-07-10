@@ -46,7 +46,13 @@ async function request<T>(
     const error = await response.json().catch(() => ({
       detail: `HTTP ${response.status}: ${response.statusText}`,
     }));
-    throw new Error(error.detail || `Request failed: ${response.status}`);
+    const message =
+      typeof error.detail === "string"
+        ? error.detail
+        : Array.isArray(error.detail)
+          ? error.detail.map((e: { msg?: string }) => e.msg || "").join(", ")
+          : `Request failed: ${response.status}`;
+    throw new Error(message);
   }
 
   return response.json();
