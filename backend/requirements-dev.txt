@@ -1,0 +1,4 @@
+# Dev/local dependencies (not needed in production)
+-r requirements.txt
+pandas==2.2.2
+psycopg2-binary==2.9.9
