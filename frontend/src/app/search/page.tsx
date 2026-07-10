@@ -329,7 +329,7 @@ export default function SearchPage() {
               <ProductCard key={product.style_number} product={product} />
             ))}
           </div>
-          {data.total_pages > 1 && (
+          {(data.total_pages || Math.ceil(data.total / 12)) > 1 && (
             <Pagination
               page={data.page || page}
               totalPages={data.total_pages || Math.ceil(data.total / 12)}

@@ -128,11 +128,28 @@ export async function getProductFilters(): Promise<ProductFilters> {
 
 // ── AI API ───────────────────────────────────────────────────────────────────
 
-export async function askQuestion(question: string) {
-  return request<NLQueryResponse>("/query/", {
+interface RawQueryResponse {
+  question: string;
+  sql: string;
+  results: Record<string, unknown>[];
+  explanation: string;
+  confidence: number;
+  exec_time_ms: number;
+}
+
+export async function askQuestion(question: string): Promise<NLQueryResponse> {
+  const raw = await request<RawQueryResponse>("/query/", {
     method: "POST",
     body: JSON.stringify({ question }),
   });
+  // Map deployed API response to frontend's expected shape
+  return {
+    question: raw.question,
+    sql: raw.sql || "",
+    rows: raw.results || [],
+    answer: raw.explanation || "No explanation available.",
+    confidence: (raw.confidence || 0) / 100, // API returns 0-100, frontend expects 0-1
+  };
 }
 
 export async function explainResult(data: ExplainRequest) {
