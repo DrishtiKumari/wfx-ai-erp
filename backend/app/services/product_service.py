@@ -93,7 +93,7 @@ async def list_products(
     query_sql = f"""
         SELECT id, style_number, style_name, category, supplier,
                fabric, color, size_range, season, selling_price, status, image_url,
-               gsm, print, brand, cost
+               gsm, "print", brand, cost
         FROM finished_goods
         {where_clause}
         ORDER BY {sort_by} {sort_order}
@@ -121,7 +121,7 @@ async def get_product_by_style(db: AsyncSession, style_number: str) -> Optional[
         text("""
             SELECT id, style_number, style_name, category, supplier,
                    fabric, color, size_range, season, selling_price, status, image_url,
-                   style_name, gsm, print, brand, cost
+                   gsm, "print", brand, cost
             FROM finished_goods
             WHERE style_number = :style_number
         """),
@@ -202,7 +202,7 @@ async def search_products(
     query_sql = f"""
         SELECT id, style_number, style_name, category, supplier,
                fabric, color, size_range, season, selling_price, status, image_url,
-               gsm, print, brand, cost
+               gsm, "print", brand, cost
         FROM finished_goods
         {where_clause}
         ORDER BY selling_price ASC
