@@ -1,12 +1,11 @@
 """
 Database connection — SQLAlchemy async engine for Supabase PostgreSQL.
-Connection pooling is handled automatically by SQLAlchemy.
-Engine is created lazily on first use to avoid import-time errors.
+Uses asyncpg driver with statement_cache_size=0 for pgbouncer compatibility.
 """
 
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
 from sqlalchemy.orm import DeclarativeBase
-from sqlalchemy import text
+from sqlalchemy import text, event
 from app.config import get_settings
 import logging
 
@@ -52,6 +51,9 @@ def _get_engine():
             max_overflow=10,
             pool_pre_ping=True,
             pool_recycle=300,
+            connect_args={
+                "statement_cache_size": 0,
+            },
         )
     return _engine
 
@@ -74,11 +76,6 @@ async def get_db() -> AsyncSession:
     """
     FastAPI dependency — yields a database session per request.
     Automatically closes the session when the request is done.
-
-    Usage:
-        @router.get("/endpoint")
-        async def endpoint(db: AsyncSession = Depends(get_db)):
-            ...
     """
     session_factory = _get_session_factory()
     async with session_factory() as session:
