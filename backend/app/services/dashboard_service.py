@@ -48,7 +48,7 @@ async def get_revenue_by_buyer(db: AsyncSession, limit: int = 10) -> list[dict]:
     Returns buyer name, total revenue, and order count.
     """
     try:
-        result = await db.execute(text("""
+        result = await db.execute(text(f"""
             SELECT
                 buyer,
                 ROUND(SUM(total_amount)::numeric, 2)::float AS revenue,
@@ -108,7 +108,7 @@ async def get_top_suppliers(db: AsyncSession, limit: int = 10) -> list[dict]:
     Top suppliers by product count — used for horizontal bar chart.
     """
     try:
-        result = await db.execute(text("""
+        result = await db.execute(text(f"""
             SELECT
                 COALESCE(supplier, 'Unknown') AS supplier,
                 COUNT(*)::int                 AS product_count
