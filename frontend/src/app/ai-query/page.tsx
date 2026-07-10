@@ -41,10 +41,9 @@ export default function AIQueryPage() {
       {/* Header */}
       <div>
         <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-          <Sparkles className="h-6 w-6" />
           AI Query
         </h2>
-        <p className="mt-1 text-gray-600">
+        <p className="mt-1 text-sm text-gray-600">
           Ask business questions in plain English. The AI will generate safe SQL,
           execute it, and provide insights.
         </p>

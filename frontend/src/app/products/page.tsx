@@ -111,8 +111,7 @@ export default function ProductsPage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold text-gray-900">Product Explorer</h2>
-        <p className="mt-1 text-gray-600">
+        <p className="text-sm text-gray-600">
           Browse, filter, and sort your finished goods catalog.
         </p>
       </div>

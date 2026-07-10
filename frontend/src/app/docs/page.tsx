@@ -16,10 +16,7 @@ export default function DocsPage() {
     <div className="space-y-8 max-w-4xl">
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold text-gray-900">
-          Documentation & Architecture
-        </h2>
-        <p className="mt-1 text-gray-600">
+        <p className="text-sm text-gray-600">
           How WFX AI ERP works — architecture, AI safety, and deployment.
         </p>
       </div>

@@ -11,7 +11,9 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "WFX AI ERP — Fashion Industry Analytics",
   description:
-    "AI-native ERP exploration platform for the apparel and fashion industry",
+    "AI-native ERP exploration platform for the apparel and fashion industry. Natural language queries, real-time dashboards, and safe NL2SQL engine.",
+  keywords: ["ERP", "AI", "Fashion", "NL2SQL", "Analytics", "Apparel"],
+  authors: [{ name: "WFX AI Intern" }],
 };
 
 export default function RootLayout({
@@ -21,7 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} font-sans antialiased`}>
+      <body className={`${inter.variable} font-sans antialiased bg-gray-50`}>
         <AppLayout>{children}</AppLayout>
       </body>
     </html>

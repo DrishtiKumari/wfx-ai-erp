@@ -113,8 +113,7 @@ export default function SearchPage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold text-gray-900">Product Search</h2>
-        <p className="mt-1 text-gray-600">
+        <p className="text-sm text-gray-600">
           Search products with keyword and advanced filters.
         </p>
       </div>

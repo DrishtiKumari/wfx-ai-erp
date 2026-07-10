@@ -97,11 +97,8 @@ export default function DashboardPage() {
     <div className="space-y-8">
       {/* Page intro */}
       <div>
-        <h2 className="text-2xl font-bold text-gray-900">
-          Business Overview
-        </h2>
-        <p className="mt-1 text-gray-600">
-          Real-time analytics for your apparel ERP operations.
+        <p className="text-sm text-gray-600">
+          Real-time analytics across your apparel ERP operations.
         </p>
       </div>
 

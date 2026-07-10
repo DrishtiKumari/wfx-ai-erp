@@ -12,18 +12,18 @@ interface StatCardProps {
 
 export function StatCard({ title, value, subtitle, icon: Icon }: StatCardProps) {
   return (
-    <Card className="border-gray-200 shadow-sm">
-      <CardContent className="p-6">
+    <Card className="border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200">
+      <CardContent className="p-5">
         <div className="flex items-start justify-between">
-          <div>
-            <p className="text-sm font-medium text-gray-500">{title}</p>
-            <p className="mt-2 text-3xl font-bold text-gray-900">{value}</p>
+          <div className="space-y-1">
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">{title}</p>
+            <p className="text-2xl font-bold text-gray-900 tracking-tight">{value}</p>
             {subtitle && (
-              <p className="mt-1 text-sm text-gray-500">{subtitle}</p>
+              <p className="text-xs text-gray-500">{subtitle}</p>
             )}
           </div>
-          <div className="rounded-lg bg-gray-100 p-3">
-            <Icon className="h-5 w-5 text-gray-600" />
+          <div className="rounded-lg bg-gray-900 p-2.5 shadow-sm">
+            <Icon className="h-4 w-4 text-white" />
           </div>
         </div>
       </CardContent>
