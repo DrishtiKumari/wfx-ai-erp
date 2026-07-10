@@ -47,19 +47,20 @@ export default function DashboardPage() {
         setLoading(true);
         setError(null);
 
-        const [statsRes, revenueRes, ordersRes, categoryRes, suppliersRes] =
-          await Promise.all([
-            getDashboardStats(),
-            getRevenueByBuyer(),
-            getOrdersByStatus(),
-            getProductsByCategory(),
-            getTopSuppliers(),
-          ]);
-
+        // Fetch sequentially to avoid pgbouncer prepared statement conflicts
+        const statsRes = await getDashboardStats();
         setStats(statsRes);
+
+        const revenueRes = await getRevenueByBuyer();
         setRevenueData(revenueRes);
+
+        const ordersRes = await getOrdersByStatus();
         setOrdersData(ordersRes);
+
+        const categoryRes = await getProductsByCategory();
         setCategoryData(categoryRes);
+
+        const suppliersRes = await getTopSuppliers();
         setSuppliersData(suppliersRes);
       } catch (err) {
         setError(
