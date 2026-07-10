@@ -8,9 +8,9 @@
 
 | Service     | URL                              |
 |-------------|----------------------------------|
-| Frontend    | _To be updated after deployment_ |
-| Backend API | _To be updated after deployment_ |
-| API Docs    | _To be updated after deployment_ |
+| Frontend    | https://wfx-ai-erp-jade.vercel.app |
+| Backend API | https://wfx-ai-erp.onrender.com |
+| API Docs    | https://wfx-ai-erp.onrender.com/docs |
 
 ---
 
