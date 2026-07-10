@@ -93,14 +93,12 @@ async def list_products(
     query_sql = f"""
         SELECT id, style_number, style_name, category, supplier,
                fabric, color, size_range, season, selling_price, status, image_url,
-               style_name, gsm, print, brand, cost
+               gsm, print, brand, cost
         FROM finished_goods
         {where_clause}
         ORDER BY {sort_by} {sort_order}
-        LIMIT :limit OFFSET :offset
+        LIMIT {limit} OFFSET {offset}
     """
-    params["limit"] = limit
-    params["offset"] = offset
 
     result = await db.execute(text(query_sql), params)
     products = [dict(row) for row in result.mappings().all()]
@@ -204,14 +202,12 @@ async def search_products(
     query_sql = f"""
         SELECT id, style_number, style_name, category, supplier,
                fabric, color, size_range, season, selling_price, status, image_url,
-               style_name, gsm, print, brand, cost
+               gsm, print, brand, cost
         FROM finished_goods
         {where_clause}
         ORDER BY selling_price ASC
-        LIMIT :limit OFFSET :offset
+        LIMIT {limit} OFFSET {offset}
     """
-    params["limit"] = limit
-    params["offset"] = offset
 
     result = await db.execute(text(query_sql), params)
     products = [dict(row) for row in result.mappings().all()]
