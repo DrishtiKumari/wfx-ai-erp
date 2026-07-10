@@ -371,9 +371,9 @@ function ProductCard({ product }: { product: ProductItem }) {
               {product.description || "No description"}
             </p>
           </div>
-          {product.price && (
+          {product.selling_price && (
             <span className="text-sm font-bold text-gray-900 whitespace-nowrap ml-2">
-              ${product.price.toFixed(2)}
+              ${product.selling_price.toFixed(2)}
             </span>
           )}
         </div>

@@ -41,14 +41,19 @@ export interface TopSupplierItem {
 export interface ProductItem {
   id?: number;
   style_number: string;
+  style_name?: string;
   description?: string;
   category?: string;
   supplier?: string;
   fabric?: string;
+  gsm?: number;
   color?: string;
-  size_range?: string;
+  print?: string;
   season?: string;
-  price?: number;
+  brand?: string;
+  cost?: number;
+  selling_price?: number;
+  size_range?: string;
   status?: string;
   image_url?: string;
 }

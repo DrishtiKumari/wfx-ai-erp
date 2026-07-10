@@ -22,13 +22,13 @@ interface ProductTableProps {
 
 const columns = [
   { key: "style_number", label: "Style #" },
-  { key: "description", label: "Description" },
+  { key: "style_name", label: "Name" },
   { key: "category", label: "Category" },
   { key: "supplier", label: "Supplier" },
   { key: "fabric", label: "Fabric" },
+  { key: "gsm", label: "GSM" },
   { key: "color", label: "Color" },
-  { key: "price", label: "Price" },
-  { key: "status", label: "Status" },
+  { key: "selling_price", label: "Price" },
 ];
 
 export function ProductTable({
@@ -79,7 +79,7 @@ export function ProductTable({
                   {product.style_number}
                 </TableCell>
                 <TableCell className="max-w-48 truncate text-gray-700">
-                  {product.description || "—"}
+                  {product.style_name || "—"}
                 </TableCell>
                 <TableCell>
                   <Badge variant="secondary" className="bg-gray-100 text-gray-700 font-normal">
@@ -93,22 +93,13 @@ export function ProductTable({
                   {product.fabric || "—"}
                 </TableCell>
                 <TableCell className="text-gray-600 text-sm">
+                  {product.gsm || "—"}
+                </TableCell>
+                <TableCell className="text-gray-600 text-sm">
                   {product.color || "—"}
                 </TableCell>
                 <TableCell className="font-medium text-gray-900">
-                  {product.price ? `$${product.price.toFixed(2)}` : "—"}
-                </TableCell>
-                <TableCell>
-                  <Badge
-                    variant={product.status === "active" ? "default" : "secondary"}
-                    className={
-                      product.status === "active"
-                        ? "bg-green-100 text-green-800 font-normal"
-                        : "bg-gray-100 text-gray-600 font-normal"
-                    }
-                  >
-                    {product.status || "—"}
-                  </Badge>
+                  {product.selling_price ? `$${product.selling_price.toFixed(2)}` : "—"}
                 </TableCell>
               </TableRow>
             ))

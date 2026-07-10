@@ -21,16 +21,23 @@ export function ProductDetail({ product, open, onClose }: ProductDetailProps) {
 
   const fields = [
     { label: "Style Number", value: product.style_number },
-    { label: "Description", value: product.description },
+    { label: "Style Name", value: product.style_name },
     { label: "Category", value: product.category },
     { label: "Supplier", value: product.supplier },
     { label: "Fabric", value: product.fabric },
+    { label: "GSM", value: product.gsm?.toString() },
     { label: "Color", value: product.color },
+    { label: "Print", value: product.print },
+    { label: "Brand", value: product.brand },
     { label: "Size Range", value: product.size_range },
     { label: "Season", value: product.season },
     {
-      label: "Price",
-      value: product.price ? `$${product.price.toFixed(2)}` : undefined,
+      label: "Cost",
+      value: product.cost ? `$${product.cost.toFixed(2)}` : undefined,
+    },
+    {
+      label: "Selling Price",
+      value: product.selling_price ? `$${product.selling_price.toFixed(2)}` : undefined,
     },
     { label: "Status", value: product.status },
   ];

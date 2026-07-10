@@ -14,7 +14,8 @@ logger = logging.getLogger(__name__)
 # Allowed sort columns to prevent SQL injection via sort_by parameter
 ALLOWED_SORT_COLUMNS = {
     "style_number", "description", "category", "supplier",
-    "fabric", "color", "season", "price", "status",
+    "fabric", "color", "season", "selling_price", "status",
+    "style_name", "gsm", "print", "brand", "cost",
 }
 
 DEFAULT_SORT = "style_number"
@@ -69,10 +70,10 @@ async def list_products(
         conditions.append("status = :status")
         params["status"] = status
     if min_price is not None:
-        conditions.append("price >= :min_price")
+        conditions.append("selling_price >= :min_price")
         params["min_price"] = min_price
     if max_price is not None:
-        conditions.append("price <= :max_price")
+        conditions.append("selling_price <= :max_price")
         params["max_price"] = max_price
 
     where_clause = ""
@@ -91,7 +92,8 @@ async def list_products(
     # Fetch paginated results
     query_sql = f"""
         SELECT id, style_number, description, category, supplier,
-               fabric, color, size_range, season, price, status, image_url
+               fabric, color, size_range, season, selling_price, status, image_url,
+               style_name, gsm, print, brand, cost
         FROM finished_goods
         {where_clause}
         ORDER BY {sort_by} {sort_order}
@@ -120,7 +122,8 @@ async def get_product_by_style(db: AsyncSession, style_number: str) -> Optional[
     result = await db.execute(
         text("""
             SELECT id, style_number, description, category, supplier,
-                   fabric, color, size_range, season, price, status, image_url
+                   fabric, color, size_range, season, selling_price, status, image_url,
+                   style_name, gsm, print, brand, cost
             FROM finished_goods
             WHERE style_number = :style_number
         """),
@@ -179,10 +182,10 @@ async def search_products(
         conditions.append("season = :season")
         params["season"] = season
     if min_price is not None:
-        conditions.append("price >= :min_price")
+        conditions.append("selling_price >= :min_price")
         params["min_price"] = min_price
     if max_price is not None:
-        conditions.append("price <= :max_price")
+        conditions.append("selling_price <= :max_price")
         params["max_price"] = max_price
 
     where_clause = ""
@@ -200,10 +203,11 @@ async def search_products(
 
     query_sql = f"""
         SELECT id, style_number, description, category, supplier,
-               fabric, color, size_range, season, price, status, image_url
+               fabric, color, size_range, season, selling_price, status, image_url,
+               style_name, gsm, print, brand, cost
         FROM finished_goods
         {where_clause}
-        ORDER BY price ASC
+        ORDER BY selling_price ASC
         LIMIT :limit OFFSET :offset
     """
     params["limit"] = limit
@@ -238,8 +242,8 @@ async def get_filter_options(db: AsyncSession) -> dict:
                 FILTER (WHERE color IS NOT NULL) AS colors,
             ARRAY_AGG(DISTINCT season ORDER BY season)
                 FILTER (WHERE season IS NOT NULL) AS seasons,
-            COALESCE(MIN(price), 0)::float AS price_min,
-            COALESCE(MAX(price), 0)::float AS price_max
+            COALESCE(MIN(selling_price), 0)::float AS price_min,
+            COALESCE(MAX(selling_price), 0)::float AS price_max
         FROM finished_goods
     """))
     row = result.mappings().one()

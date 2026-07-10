@@ -18,9 +18,14 @@ class ProductItem(BaseModel):
     color: Optional[str] = None
     size_range: Optional[str] = None
     season: Optional[str] = None
-    price: Optional[float] = None
+    selling_price: Optional[float] = None
     status: Optional[str] = None
     image_url: Optional[str] = None
+    style_name: Optional[str] = None
+    gsm: Optional[str] = None
+    print: Optional[str] = None
+    brand: Optional[str] = None
+    cost: Optional[float] = None
 
 
 class ProductListResponse(BaseModel):
