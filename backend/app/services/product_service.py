@@ -13,9 +13,9 @@ logger = logging.getLogger(__name__)
 
 # Allowed sort columns to prevent SQL injection via sort_by parameter
 ALLOWED_SORT_COLUMNS = {
-    "style_number", "description", "category", "supplier",
+    "style_number", "style_name", "category", "supplier",
     "fabric", "color", "season", "selling_price", "status",
-    "style_name", "gsm", "print", "brand", "cost",
+    "gsm", "print", "brand", "cost",
 }
 
 DEFAULT_SORT = "style_number"
@@ -91,7 +91,7 @@ async def list_products(
 
     # Fetch paginated results
     query_sql = f"""
-        SELECT id, style_number, description, category, supplier,
+        SELECT id, style_number, style_name, category, supplier,
                fabric, color, size_range, season, selling_price, status, image_url,
                style_name, gsm, print, brand, cost
         FROM finished_goods
@@ -121,7 +121,7 @@ async def get_product_by_style(db: AsyncSession, style_number: str) -> Optional[
     """
     result = await db.execute(
         text("""
-            SELECT id, style_number, description, category, supplier,
+            SELECT id, style_number, style_name, category, supplier,
                    fabric, color, size_range, season, selling_price, status, image_url,
                    style_name, gsm, print, brand, cost
             FROM finished_goods
@@ -156,7 +156,7 @@ async def search_products(
     # Keyword search using ILIKE across multiple columns
     if q:
         conditions.append("""(
-            description ILIKE :q OR
+            style_name ILIKE :q OR
             category ILIKE :q OR
             fabric ILIKE :q OR
             color ILIKE :q OR
@@ -202,7 +202,7 @@ async def search_products(
     total_pages = math.ceil(total / limit) if total > 0 else 1
 
     query_sql = f"""
-        SELECT id, style_number, description, category, supplier,
+        SELECT id, style_number, style_name, category, supplier,
                fabric, color, size_range, season, selling_price, status, image_url,
                style_name, gsm, print, brand, cost
         FROM finished_goods
