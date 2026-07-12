@@ -6,7 +6,6 @@ import { QueryInput } from "@/components/ai/query-input";
 import { SqlDisplay } from "@/components/ai/sql-display";
 import { ResultTable } from "@/components/ai/result-table";
 import { AnswerCard } from "@/components/ai/answer-card";
-import { Skeleton } from "@/components/ui/skeleton";
 import { askQuestion } from "@/lib/api";
 import type { NLQueryResponse } from "@/lib/types";
 
@@ -63,10 +62,16 @@ export default function AIQueryPage() {
 
       {/* Loading state */}
       {loading && (
-        <div className="space-y-4">
-          <Skeleton className="h-32 rounded-xl" />
-          <Skeleton className="h-48 rounded-xl" />
-          <Skeleton className="h-24 rounded-xl" />
+        <div className="flex flex-col items-center justify-center py-12">
+          <div className="relative">
+            <div className="h-12 w-12 rounded-full border-4 border-gray-200 border-t-gray-900 animate-spin" />
+          </div>
+          <p className="mt-4 text-sm font-medium text-gray-700">
+            Generating SQL and querying your data...
+          </p>
+          <p className="mt-1 text-xs text-gray-500">
+            This may take 10-20 seconds on the free tier
+          </p>
         </div>
       )}
 

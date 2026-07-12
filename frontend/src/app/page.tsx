@@ -70,6 +70,11 @@ export default function DashboardPage() {
         <p className="text-sm text-gray-600">
           Real-time analytics across your apparel ERP operations.
         </p>
+        {loading && (
+          <p className="mt-1 text-xs text-gray-400">
+            Loading data from server (may take a few seconds on first visit)...
+          </p>
+        )}
       </div>
 
       {/* KPI Cards */}
