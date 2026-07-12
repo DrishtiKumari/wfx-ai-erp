@@ -15,7 +15,7 @@ class Settings(BaseSettings):
 
     # ── OpenRouter AI ─────────────────────────────────────────────
     openrouter_api_key: str = ""
-    openrouter_model: str = "meta-llama/llama-3.1-8b-instruct:free"
+    openrouter_model: str = "google/gemini-2.0-flash-001"
 
     # ── App ───────────────────────────────────────────────────────
     app_name: str = "WFX AI ERP"

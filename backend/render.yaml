@@ -18,7 +18,7 @@ services:
       - key: OPENROUTER_API_KEY
         sync: false
       - key: OPENROUTER_MODEL
-        value: meta-llama/llama-3.1-8b-instruct:free
+        value: google/gemini-2.0-flash-001
       - key: ALLOWED_ORIGINS
         sync: false
       - key: PYTHON_VERSION
