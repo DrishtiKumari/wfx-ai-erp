@@ -43,15 +43,21 @@ async function request<T>(
   });
 
   if (!response.ok) {
-    const error = await response.json().catch(() => ({
-      detail: `HTTP ${response.status}: ${response.statusText}`,
-    }));
-    const message =
-      typeof error.detail === "string"
-        ? error.detail
-        : Array.isArray(error.detail)
-          ? error.detail.map((e: { msg?: string }) => e.msg || "").join(", ")
-          : `Request failed: ${response.status}`;
+    let message = `Request failed: ${response.status}`;
+    try {
+      const error = await response.json();
+      if (typeof error.detail === "string") {
+        message = error.detail;
+      } else if (Array.isArray(error.detail)) {
+        message = error.detail.map((e: { msg?: string }) => e.msg || JSON.stringify(e)).join(", ");
+      } else if (error.detail) {
+        message = JSON.stringify(error.detail);
+      } else if (error.message) {
+        message = typeof error.message === "string" ? error.message : JSON.stringify(error.message);
+      }
+    } catch {
+      message = `HTTP ${response.status}: ${response.statusText}`;
+    }
     throw new Error(message);
   }
 

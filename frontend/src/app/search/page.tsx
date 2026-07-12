@@ -52,10 +52,10 @@ export default function SearchPage() {
       setError(null);
 
       let result;
-      if (keyword) {
-        // Use search endpoint when there's a keyword
+      if (keyword && keyword.trim().length > 0) {
+        // Use search endpoint only when there's an actual keyword
         result = await searchProducts({
-          q: keyword,
+          q: keyword.trim(),
           category: activeFilters.category || undefined,
           fabric: activeFilters.fabric || undefined,
           supplier: activeFilters.supplier || undefined,
@@ -69,7 +69,7 @@ export default function SearchPage() {
             : undefined,
         });
       } else {
-        // Use products listing endpoint when no keyword
+        // Use products listing endpoint for browsing without keyword
         result = await getProducts({
           page,
           page_size: 12,
@@ -88,7 +88,8 @@ export default function SearchPage() {
 
       setData(result);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Search failed");
+      const msg = err instanceof Error ? err.message : String(err);
+      setError(msg);
     } finally {
       setLoading(false);
     }
