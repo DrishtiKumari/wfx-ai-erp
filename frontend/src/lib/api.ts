@@ -125,16 +125,38 @@ export async function searchProducts(params: ProductSearchParams = {}) {
 }
 
 export async function getProductFilters(): Promise<ProductFilters> {
-  // Filters endpoint doesn't exist on deployed backend,
-  // so we return empty defaults
+  // Known filter values from the deployed dataset (1000 products)
   return {
-    categories: [],
-    fabrics: [],
-    suppliers: [],
-    colors: [],
-    seasons: [],
+    categories: [
+      "Dress", "Hoodie", "Jacket", "Jeans", "Polo", "Shirt",
+      "Shorts", "Skirt", "Sweatshirt", "Trousers", "T-Shirt"
+    ],
+    fabrics: [
+      "100% Cotton", "Chambray", "Chino Twill", "Cotton Canvas",
+      "Cotton Fleece", "Cotton Pique", "Cotton Slub", "Cotton Twill",
+      "Cotton Voile", "Cotton/Linen 70/30", "Cotton/Polyester 60/40",
+      "Cotton/Polyester Fleece 80/20", "Cotton/Spandex 95/5",
+      "Denim 10oz", "Denim 12oz", "Denim 14oz", "French Terry",
+      "Linen", "Loopback Cotton", "Nylon Ripstop", "Nylon Taslan",
+      "Organic Cotton", "Oxford Cotton", "Poly/Viscose Suiting",
+      "Polyester Crepe", "Polyester Pique", "Polyester Shell",
+      "Rayon Challis", "Stretch Denim 98/2", "Viscose"
+    ],
+    suppliers: [
+      "ABC Textiles", "Colombo Apparel Group", "Dhaka Knitwear Ltd",
+      "Guangzhou Weave Co", "Hanoi Stitch Co", "Istanbul Denim House",
+      "Jakarta Garmindo", "Karachi Textile Mills", "Noida Knits Pvt Ltd",
+      "Phnom Penh Sewing Ltd", "Shenzhen Fashion Works", "Tirupur Garments Co"
+    ],
+    colors: [
+      "Beige", "Black", "Blue", "Brown", "Charcoal", "Coral",
+      "Grey Melange", "Indigo", "Lavender", "Maroon", "Mustard",
+      "Navy", "Off White", "Olive", "Pink", "Plum", "Red",
+      "Sky Blue", "Teal"
+    ],
+    seasons: ["AW25", "AW26", "SS25", "SS26"],
     price_min: 0,
-    price_max: 10000,
+    price_max: 5000,
   };
 }
 
